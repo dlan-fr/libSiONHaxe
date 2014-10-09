@@ -203,7 +203,7 @@ package org.si.sion.utils.soundloader ;
         {
             _bytesTotal += bytesTotalDiff;
             _bytesLoaded += bytesLoadedDiff;
-            dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, _bytesLoaded, _bytesTotal));
+            dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, _bytesLoaded, Std.int(_bytesTotal)));
         }
         
         

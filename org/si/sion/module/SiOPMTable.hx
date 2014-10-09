@@ -996,13 +996,15 @@ package org.si.sion.module ;
             imax  = SAMPLING_TABLE_SIZE;
             imax2 = SAMPLING_TABLE_SIZE >> 1;
             imax4 = SAMPLING_TABLE_SIZE >> 2;
-           j=1;
- while( j<60){
+           j = 1;
+		   
+			while( j<60){
                 iv = imax4>>(j>>3);
                 iv -= (iv * (j&7))>>4;
                 if (prev == iv) {
                     waveTables[PG_RAMP+64-j] = waveTables[PG_RAMP+65-j];
-                    waveTables[PG_RAMP+64+j] = waveTables[PG_RAMP+63+j];
+                    waveTables[PG_RAMP + 64 + j] = waveTables[PG_RAMP + 63 + j];
+					j++;
                     continue;
                 }
                 prev = iv;
@@ -1012,28 +1014,28 @@ package org.si.sion.module ;
                 imax3 = imax2 - iv;
                 dp = 1/imax3;
                i=0; p=dp*0.5;
- while( i<imax3){
+			while( i<imax3){
                     iv = calcLogTableIndex(p);
                     table1[i]         = iv;   
                     table1[imax-i-1]  = iv+1; 
                     table2[imax2+i]   = iv+1; 
                     table2[imax2-i-1] = iv;   
                  i++; p+=dp;
-}
+				}
                 dp = 1/(imax2-imax3);
                
- while( i<imax2){
+			while( i<imax2){
                     iv = calcLogTableIndex(p);
                     table1[i]         = iv;   
                     table1[imax-i-1]  = iv+1; 
                     table2[imax2+i]   = iv+1; 
                     table2[imax2-i-1] = iv;   
                  i++; p-=dp;
-}
+			}
                 waveTables[PG_RAMP+64-j] = SiOPMWaveTable.alloc(table1);
                 waveTables[PG_RAMP+64+j] = SiOPMWaveTable.alloc(table2);
              j++;
-}
+		}
            j=0;
  while(   j<5){ waveTables[PG_RAMP+j] = waveTables[PG_SAW_UP];   j++;
 }

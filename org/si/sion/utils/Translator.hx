@@ -12,7 +12,7 @@ package org.si.sion.utils ;
     import org.si.sion.effector.SiEffectModule;
     import org.si.sion.effector.SiEffectBase;
     import org.si.utils.SLLint;
-	import flash.utils.RegExp;
+	//import flash.utils.RegExp;
 	import flash.errors.Error;
 	import org.si.sion.module.SiOPMChannelParam;
 	import org.si.sion.module.SiOPMWaveSamplerTable;
@@ -66,7 +66,7 @@ package org.si.sion.utils ;
         
         static public function tsscp(tsscpMML:String, volumeByX:Bool=true) : String
         {
-            var mml:String, com:String, str1:String, str2:String, i:Int, imax:Int, volUp:String, volDw:String, rex:RegExp, rex_sys:RegExp, rex_com:RegExp, res:Dynamic;
+            var mml:String, com:String, str1:String, str2:String, i:Int, imax:Int, volUp:String, volDw:String, rex:EReg, rex_sys:EReg, rex_com:EReg, res:Dynamic;
             
         
         
@@ -81,9 +81,9 @@ package org.si.sion.utils ;
             var p0:Int, p1:Int, p2:Int, p3:Int, p4:Int, reql8:Bool, octave:Int, revOct:Bool, 
                 loopOct:Int, loopMacro:Bool, loopMMLBefore:String, loopMMLContent:String;
 
-            rex  = new RegExp("(;|(/:|:/|ml|mp|na|ns|nt|ph|@kr|@ks|@ml|@ns|@apn|@[fkimopqsv]?|[klopqrstvx$%<>(){}[\\]|_~^/&*]|[a-g][#+\\-]?)\\s*([\\-\\d]*)[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?)|#(FM|[A-Z]+)=?\\s*([^;]*)|([A-Z])(\\(([a-g])([\\-+#]?)\\))?|.", "gms");
-            rex_sys = new RegExp("\\s*([0-9]*)[,=<\\s]*([^>]*)","ms");
-            rex_com = new RegExp("[{}]","gms");
+            rex  = new EReg("(;|(/:|:/|ml|mp|na|ns|nt|ph|@kr|@ks|@ml|@ns|@apn|@[fkimopqsv]?|[klopqrstvx$%<>(){}[\\]|_~^/&*]|[a-g][#+\\-]?)\\s*([\\-\\d]*)[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?[,\\s]*([\\-\\d]+)?)|#(FM|[A-Z]+)=?\\s*([^;]*)|([A-Z])(\\(([a-g])([\\-+#]?)\\))?|.", "gms");
+            rex_sys = new EReg("\\s*([0-9]*)[,=<\\s]*([^>]*)","ms");
+            rex_com = new EReg("[{}]","gms");
 
             volUp = "(";
             volDw = ")";
@@ -95,7 +95,7 @@ package org.si.sion.utils ;
             loopMacro = false;
             loopMMLBefore = null;
             loopMMLContent = null;
-            res = rex.exec(tsscpMML);
+            res = rex.match(tsscpMML);
             while (res) {
                 if (res[1] != null) {
                     if (res[1] == ';') {
@@ -209,15 +209,16 @@ package org.si.sion.utils ;
                                 case '{': {
                                     i = 1;
                                     p0 = res.index + 1;
-                                    rex_com.lastIndex = p0;
+                                    //rex_com.lastIndex = p0;
+									
                                     do {
-                                        res = rex_com.exec(tsscpMML);
+                                        res = rex_com.match(tsscpMML);
                                             if (res == null) throw errorTranslation("{{...} ?");
                                         if (res[0] == '{') i++;
                                         else if (res[0] == '}') --i;
                                     } while (i != 0);
                                     mml += "";
-                                    rex.lastIndex = res.index + 1;
+                                    //rex.lastIndex = res.index + 1;
                                 }break;
                                     
                                 case '[': { 
@@ -303,12 +304,12 @@ package org.si.sion.utils ;
                         }
                         
                         case 'TABLE': {
-                            res = rex_sys.exec(res[9]);
+                            res = rex_sys.match(res[9]);
                             mml += "#TABLE" + res[1] + "{" + res[2] + "}*0.25";
                         }
                         
                         case 'WAVB': {
-                            res = rex_sys.exec(res[9]);
+                            res = rex_sys.match(res[9]);
                             str1 = Std.string(res[2]);
                             mml += "#WAVB" + res[1] + "{";
                            i=0;
@@ -340,17 +341,17 @@ package org.si.sion.utils ;
                         
                         case 'MML','FINENESS':
                             
-                            res = rex.exec(tsscpMML);
+                            res = rex.match(tsscpMML);
                             
                         default: {
                             if (str1.length == 1) {
                                 
                                 mml += "#" + str1 + "=";
-                                rex.lastIndex -= cast res[9].length;
+                                //rex.lastIndex -= cast res[9].length;
                                 reql8 = false;
                             } else {
                                 
-                                res = rex_sys.exec(res[9]);
+                                res = rex_sys.match(res[9]);
                                 if (res[2].length == 0) return "#" + str1 + res[1];
                                 mml += "#" + str1 + res[1] + "{" + res[2] + "}";
                             }
@@ -361,7 +362,7 @@ package org.si.sion.utils ;
                 {
                     mml += res[0];
                 }
-                res = rex.exec(tsscpMML);
+                res = rex.match(tsscpMML);
             }
             tsscpMML = mml;
             
@@ -378,7 +379,7 @@ package org.si.sion.utils ;
         
         static public function parseEffectorMML(mml:String, postfix:String="") : Array<Dynamic>
         {
-            var ret:Array<Dynamic>, res:Dynamic, rex:RegExp = new RegExp("([a-zA-Z_]+|,)\\s*([.\\-\\d]+)?","g") , i:Int,
+            var ret:Array<Dynamic>, res:Dynamic, rex:EReg = new EReg("([a-zA-Z_]+|,)\\s*([.\\-\\d]+)?","g") , i:Int,
                 cmd:String = "", argc:Int = 0, args: Array<Float> = new Array<Float>();
             
             
@@ -404,7 +405,7 @@ package org.si.sion.utils ;
             _clearArgs();
             
             
-            res = rex.exec(mml);
+            res = rex.match(mml);
             while (res) {
                 if (res[1] == ",") {
                     args[argc++] = Std.parseFloat(res[2]);
@@ -415,7 +416,7 @@ package org.si.sion.utils ;
                     args[0] = Std.parseFloat(res[2]);
                     argc = 1;
                 }
-                res = rex.exec(mml);
+                res = rex.match(mml);
             }
             _connectEffect();
             
@@ -1214,8 +1215,8 @@ package org.si.sion.utils ;
             var comrex:EReg = new EReg("/\\*.*?\\*/|//.*?[\\r\\n]+", "gms");
 			
 			
-            var seqrex:RegExp = new RegExp("/(#[A-Z@]+)([^;{]*({.*?})?[^;]*);","gms"); //}
-            var prmrex:RegExp = new RegExp("/\\s*(\\d*)\\s*(\\{(.*?)\\})?(.*)","ms");
+            var seqrex:EReg = new EReg("/(#[A-Z@]+)([^;{]*({.*?})?[^;]*);","gms"); //}
+            var prmrex:EReg = new EReg("/\\s*(\\d*)\\s*(\\{(.*?)\\})?(.*)","ms");
             var res:Dynamic, res2:Dynamic, cmd:String, num:Int, dat:String, pfx:String, cmds:Array<Dynamic>=[];
             
             
@@ -1223,11 +1224,11 @@ package org.si.sion.utils ;
             mml = comrex.replace(mml, "") + ";";
             
             
-            while (res = seqrex.exec(mml)) {
+            while (res = seqrex.match(mml)) {
                 cmd = Std.string(res[1]);
                 if (res[2] != "") {
-                    prmrex.lastIndex = 0;
-                    res2 = prmrex.exec(res[2]);
+                    //prmrex.lastIndex = 0;
+                    res2 = prmrex.match(res[2]);
                     num = Std.int(res2[1]);
                     dat = (res2[2] == null) ? "" : Std.string(res2[3]);
                     pfx = Std.string(res2[4]);
@@ -1255,8 +1256,8 @@ package org.si.sion.utils ;
            i=0;
  while( i<10){ ags += "(\\s*,\\s*(-?\\d*))?"; i++;
 }
-            var rex:RegExp = new RegExp(cmd+ags, "g");
-            var res:Dynamic = rex.exec(mml);
+            var rex:EReg = new EReg(cmd+ags, "g");
+            var res:Dynamic = rex.match(mml);
             var param:SiOPMChannelParam = voice.channelParam;
             while (res) {
                 switch(res[1]) {
@@ -1422,7 +1423,7 @@ package org.si.sion.utils ;
                     }
                     break;
                 }
-                res = rex.exec(mml);
+                res = rex.match(mml);
             }
             return voice;
         }

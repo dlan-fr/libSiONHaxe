@@ -11,7 +11,7 @@ package org.si.sion.effector ;
     
     
         
-        function new(freq:Float=3000, slope:Float=1, gain:Float=6) 
+        public function new(freq:Float=3000, slope:Float=1, gain:Float=6) 
         {
             setParameters(freq, slope, gain);
 			super();

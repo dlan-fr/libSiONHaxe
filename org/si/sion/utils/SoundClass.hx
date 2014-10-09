@@ -7,7 +7,6 @@
 package org.si.sion.utils;
     import flash.display.Loader;
     import flash.events.*;
-	import flash.net.DynamicPropertyOutput;
     import flash.utils.ByteArray;
     import flash.media.Sound;
 	import flash.errors.Error;
@@ -144,7 +143,7 @@ package org.si.sion.utils;
 		   var _write:Dynamic =  function (vu: Array<Int>) : Void { for (ui in vu) { bytes.writeUnsignedInt(ui); } }
 			
             bytes.endian = Endian.LITTLE_ENDIAN;
-            bytes.length = size + 295;
+            //bytes.length = size + 295;
             bytes.position = 0;
             _write(_header);
             bytes.position = 4;

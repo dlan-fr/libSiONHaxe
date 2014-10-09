@@ -7,7 +7,7 @@
 package org.si.sion.sequencer.base ;
 	import flash.errors.Error;
 	import flash.Lib;
-	import flash.utils.RegExp;
+	//import flash.utils.RegExp;
     
     
     class MMLParser
@@ -129,7 +129,7 @@ package org.si.sion.sequencer.base ;
         static public function parseProgress() : Float
         {
             if (_mmlString != null) {
-                return _mmlRegExp.lastIndex / (_mmlString.length+1);
+                return 0;//_mmlRegExp.lastIndex / (_mmlString.length+1); HAXE Port Regex -> Ereg
             }
             return 0;
         }
@@ -357,8 +357,8 @@ package org.si.sion.sequencer.base ;
         inline static private var REX_TABLE     :Int = 8;
         inline static private var REX_PARAM     :Int = 9;
         inline static private var REX_PERIOD    :Int = 10;
-        static private var _mmlRegExp:RegExp = null;
-        static private function createRegExp(reset:Bool) : RegExp
+        static private var _mmlRegExp:EReg = null;
+        static private function createRegExp(reset:Bool) : EReg
         {
             if (_mmlRegExp == null) {
                 
@@ -388,11 +388,11 @@ package org.si.sion.sequencer.base ;
                     rex += "|(\\{.*?\\}[0-9]*\\*?[\\-0-9.]*\\+?[\\-0-9.]*)";    
                 rex += ")\\s*(-?[0-9]*)";                                    
                 rex += "\\s*(\\.*)";                                         
-                _mmlRegExp = new RegExp(rex, 'gms');
+                _mmlRegExp = new EReg(rex, 'gms');
             }
             
             
-            if (reset) _mmlRegExp.lastIndex = 0;
+           // if (reset) _mmlRegExp.matched = 0;
             return _mmlRegExp;
         }
         
@@ -421,7 +421,7 @@ package org.si.sion.sequencer.base ;
             var shift:Int;
 			var note:Int;
 			var halt:Bool;
-			var rex:RegExp;
+			var rex:EReg;
 			var res:Dynamic = null;
             var mml2nn:Int = _setting.mml2nn();
 			var codeC:Int = "c".charCodeAt(0);
@@ -455,7 +455,7 @@ package org.si.sion.sequencer.base ;
             
             
             halt = false;
-            res = rex.exec(_mmlString);
+            res = rex.match(_mmlString);
             while (res && Std.string(res[0]).length>0) {
                 
                 if (res[REX_WHITESPACE] == null) {
@@ -530,7 +530,7 @@ package org.si.sion.sequencer.base ;
                 if (halt) return null;
                 
                 
-                res = rex.exec(_mmlString);
+                res = rex.match(_mmlString);
             }
             
             
@@ -577,7 +577,7 @@ package org.si.sion.sequencer.base ;
             _staticNoteShift   = 0;                         
             _isLastEventLength = false;                      
 			 _repeatStac = new Array<Dynamic>();
-            _headMMLIndex      = _mmlRegExp.lastIndex;      
+            _headMMLIndex      = 0;//_mmlRegExp.;      
         }
         
         
@@ -831,7 +831,7 @@ package org.si.sion.sequencer.base ;
             if (_lastEvent.id != MMLEvent.SEQUENCE_HEAD) {
                 if (_lastSequenceHead.next != null && _lastSequenceHead.next.id == MMLEvent.DEBUG_INFO) {
                     
-                    _lastSequenceHead.next.data = _regSequenceMMLStrings(_mmlString.substring(_headMMLIndex, _mmlRegExp.lastIndex));
+                    _lastSequenceHead.next.data = _regSequenceMMLStrings(_mmlString.substring(_headMMLIndex, 0)); //_mmlRegExp.lastIndex
                 }
                 addMMLEvent(MMLEvent.SEQUENCE_HEAD, 0);
                 if (_cacheMMLString) addMMLEvent(MMLEvent.DEBUG_INFO, -1);

@@ -9,8 +9,8 @@
 
 package org.si.utils ;
 	import flash.display.DisplayObjectContainer;
-    import flash.net.FileFilter;
-    import flash.net.FileReference;
+    //import flash.net.FileFilter;
+    //import flash.net.FileReference;
     import flash.net.URLRequest;
     import flash.net.URLLoader;
     import flash.utils.ByteArray;
@@ -281,7 +281,7 @@ package org.si.utils ;
         
         public function browse(onComplete:Dynamic=null, onCancel:Dynamic=null, onError:Dynamic=null, fileFilterName:String=null, extensions:String=null) : Void
         {
-            var fr:FileReference = new FileReference(), bae:ByteArrayExt = this;
+            /*var fr:FileReference = new FileReference(), bae:ByteArrayExt = this;
 			var _onBrowseComplete:Dynamic = null;
 			var _onBrowseCancel:Dynamic = null;
 			var _onBrowseError:Dynamic = null;
@@ -311,8 +311,10 @@ package org.si.utils ;
                 fr.addEventListener("ioError", _onBrowseError);
                 fr.load();
             });
+			
+			
             fr.browse((fileFilterName != null) ? [new FileFilter(fileFilterName, extensions)] : null);
-
+*/
 
         }
         
@@ -320,7 +322,7 @@ package org.si.utils ;
         
         public function save(defaultFileName:String=null, onComplete:Dynamic=null, onCancel:Dynamic=null, onError:Dynamic=null) : Void
         {
-			var _onSaveComplete:Dynamic = null;
+			/*var _onSaveComplete:Dynamic = null;
 			var _onSaveCancel:Dynamic = null;
 			var _onSaveError:Dynamic = null;
 			
@@ -342,7 +344,7 @@ package org.si.utils ;
             fr.addEventListener("complete", _onSaveComplete);
             fr.addEventListener("cancel", _onSaveCancel);
             fr.addEventListener("ioError", _onSaveError);
-            fr.save(this, defaultFileName);
+            fr.save(this, defaultFileName);*/
 
 
         }

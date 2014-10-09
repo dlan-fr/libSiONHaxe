@@ -147,7 +147,7 @@ package org.si.sion.midi ;
             }
            i=0;
  while( i<128){
-                voiceSet[i] = preset.dynProperties.get("preset")[i];
+                voiceSet[i] = preset.dynProperties.get("svmidi")[i];
              i++;
 }
            i=0;

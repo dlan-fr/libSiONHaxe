@@ -6,13 +6,13 @@
 
 
 package org.si.sion ;
-    import flash.errors.*;
-    import flash.events.*;
+    //import flash.errors.*;
+    //import flash.events.*;
 	import flash.Lib;
     import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
-    import flash.net.*;
+    //import flash.net.*;
     import flash.display.Sprite;
     import flash.utils.ByteArray;
     import org.si.utils.SLLint;
@@ -44,6 +44,13 @@ package org.si.sion ;
     import org.si.sion.utils.Fader;
 	import org.si.sion.SiONData;
     
+	import flash.events.Event;
+	import flash.events.SampleDataEvent;
+	import flash.events.IOErrorEvent;
+	import flash.events.ErrorEvent;
+	
+	import flash.errors.Error;
+	import flash.net.URLRequest;
     
     
     /*
@@ -1474,6 +1481,12 @@ package org.si.sion ;
                 
                 _inStreaming = true;
                 
+				if (e.data == null)
+				{
+					e.data = new ByteArray();
+					e.data.bigEndian = false;
+				}
+				
                 if (_isPaused || _suspendStreaming) {
                     
                     _fillzero(e.data);

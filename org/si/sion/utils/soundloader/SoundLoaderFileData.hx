@@ -128,7 +128,7 @@ package org.si.sion.utils.soundloader ;
             switch (_type) {
             case "mp3":
                 _addAllListeners(_sound = new Sound());
-                _sound.load(_urlRequest, new SoundLoaderContext(1000, _checkPolicyFile));
+                _sound.load(_urlRequest, null);//new SoundLoaderContext(1000, _checkPolicyFile)
             case "img","ssfpng":
                 _loader = new Loader();
                 _addAllListeners(_loader.contentLoaderInfo);

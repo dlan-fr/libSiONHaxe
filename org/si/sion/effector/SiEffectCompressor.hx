@@ -30,7 +30,7 @@ package org.si.sion.effector ;
     
     
         
-        function new(thres:Float=0.7, wndTime:Float=50, attTime:Float=20, relTime:Float=20, maxGain:Float=-6, mixingLevel:Float=0.5)
+        public function new(thres:Float=0.7, wndTime:Float=50, attTime:Float=20, relTime:Float=20, maxGain:Float=-6, mixingLevel:Float=0.5)
         {
             setParameters(thres, wndTime, attTime, relTime, maxGain, mixingLevel);
         }

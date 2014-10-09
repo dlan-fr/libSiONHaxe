@@ -8,7 +8,6 @@ package org.si.sion.effector ;
 	import flash.display.DisplayObjectContainer;
     import org.si.sion.module.SiOPMModule;
     import org.si.sion.module.SiOPMStream;
-	import flash.utils.RegExp;
     
     
     
@@ -218,8 +217,8 @@ package org.si.sion.effector ;
         public function parseMML(slot:Int, mml:String, postfix:String) : Void
         {
             var res:Dynamic, i:Int, cmd:String = "", argc:Int = 0, args: Array<Float> = new Array<Float>(),
-                rexMML:RegExp = new RegExp("([a-zA-Z_]+|,)\\s*([.\\-\\d]+)?", "g"),
-                rexPost:RegExp = new RegExp("(p|@p|@v|,)\\s*([.\\-\\d]+)?", "g");
+				rexMML:EReg = new EReg("([a-zA-Z_]+|,)\\s*([.\\-\\d]+)?", "g"),
+                rexPost:EReg = new EReg("(p|@p|@v|,)\\s*([.\\-\\d]+)?", "g");
 				
 			 var _connectEffect:Dynamic =  function () : Void {
                 if (argc == 0) return;
@@ -268,7 +267,7 @@ package org.si.sion.effector ;
             _clearArgs();
             
             
-            res = rexMML.exec(mml);
+            res = rexMML.match(mml);
             while (res) {
                 if (res[1] == ",") {
                     args[argc++] = Std.parseFloat(res[2]);
@@ -279,13 +278,13 @@ package org.si.sion.effector ;
                     args[0] = Std.parseFloat(res[2]);
                     argc = 1;
                 }
-                res = rexMML.exec(mml);
+                res = rexMML.match(mml);
             }
             _connectEffect();
             _clearArgs();
             
             
-            res = rexPost.exec(postfix);
+            res = rexPost.match(postfix);
             while (res) {
                 if (res[1] == ",") {
                     args[argc++] = Std.parseFloat(res[2]);
@@ -296,7 +295,7 @@ package org.si.sion.effector ;
                     args[0] = Std.parseFloat(res[2]);
                     argc = 1;
                 }
-                res = rexPost.exec(postfix);
+                res = rexPost.match(postfix);
             }
             _setVolume();
             

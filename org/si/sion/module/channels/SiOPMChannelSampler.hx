@@ -257,9 +257,9 @@ package org.si.sion.module.channels ;
                     
                    residue=len; i=0; imax=0;
  while( residue>0){
-                        
-                        _extractedByteArray.length = 0;
-                        processed = Std.int(_sampleData.soundData().extract(_extractedByteArray, cast(residue,Float), cast(_sampleIndex<<1,Float)));
+                        _extractedByteArray.clear();
+                        processed = 0;
+						//Std.int(_sampleData.soundData().extract(_extractedByteArray, cast(residue,Float), cast(_sampleIndex<<1,Float))); //HAXE no sound.extract
                         _sampleIndex += processed >> 1;
                         if (_sampleIndex > _sampleData.endPoint()) processed -= _sampleIndex - _sampleData.endPoint();
                         

@@ -605,7 +605,8 @@ package org.si.sion.utils ;
             
             
             _waveData.clear();
-            _waveData.length = output.length * byteRate;
+			//_waveData.
+           // _waveData.length = output.length * byteRate;
             _waveData.position = 0;
             
             

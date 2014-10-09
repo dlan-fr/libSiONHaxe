@@ -36,7 +36,7 @@ package org.si.sion.effector ;
     
     
         
-        function new(preGain:Float=-60, postGain:Float=18, lpfFreq:Float=2400, lpfSlope:Float=1) 
+        public function new(preGain:Float=-60, postGain:Float=18, lpfFreq:Float=2400, lpfSlope:Float=1) 
         {
             setParameters(preGain, postGain);
         }        

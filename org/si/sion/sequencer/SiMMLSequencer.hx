@@ -5,7 +5,7 @@
 
 
 package org.si.sion.sequencer ;
-	import flash.display.ActionScriptVersion;
+	//import flash.display.ActionScriptVersion;
     import flash.system.System;
     import org.si.utils.SLLint;
     import org.si.sion.sequencer.base.MMLData;
@@ -21,7 +21,7 @@ package org.si.sion.sequencer ;
     import org.si.sion.module.SiOPMWaveSamplerTable;
     import org.si.sion.module.SiOPMWavePCMTable;
     import org.si.sion.utils.Translator;
-	import flash.utils.RegExp;
+	//import flash.utils.RegExp;
 	import flash.errors.Error;
     
     
@@ -492,9 +492,9 @@ package org.si.sion.sequencer ;
             var codeH:Int = "-".charCodeAt(0);
             var comrex:EReg = new EReg("/\\*.*?\\*/|//.*?[\\r\\n]+", "gms");
 			
-            var reprex:RegExp = new RegExp("!\\[(\\d*)(.*?)(!\\|(.*?))?!\\](\\d*)", "gms");
-            var seqrex:RegExp = new RegExp("[ \\t\\r\\n]*(#([A-Z@\\-]+)(\\+=|=)?)?([^;{]*({.*?})?[^;]*);", "gms"); 
-            var midrex:RegExp = new RegExp("([A-Z])?(-([A-Z])?)?", "g");
+            var reprex:EReg = new EReg("!\\[(\\d*)(.*?)(!\\|(.*?))?!\\](\\d*)", "gms");
+            var seqrex:EReg = new EReg("[ \\t\\r\\n]*(#([A-Z@\\-]+)(\\+=|=)?)?([^;{]*({.*?})?[^;]*);", "gms"); 
+            var midrex:EReg = new EReg("([A-Z])?(-([A-Z])?)?", "g");
             var expmml:String, res:Dynamic, midres:Dynamic, c:Int, i:Int, imax:Int, str1:String, str2:String, concat:Bool, startID:Int, endID:Int;
 
             
@@ -515,7 +515,7 @@ package org.si.sion.sequencer ;
 
             
             expmml = "";
-            res = seqrex.exec(mml);
+            res = seqrex.match(mml);
             while (res) {
                 
                 if (res[1] == null) {
@@ -540,8 +540,8 @@ package org.si.sion.sequencer ;
                     str2 = Std.string(res[2]);
                     concat = (res[3] == "+=");
                     
-                    midrex.lastIndex = 0;
-                    midres = midrex.exec(str2);
+                    //midrex.lastIndex = 0;
+                    midres = midrex.match(str2);
                     while (midres[0]) {
                         startID = (midres[1]) ? (Std.string(midres[1]).charCodeAt(0) - codeA) : 0;
                         endID   = (midres[2]) ? ((midres[3]) ? (Std.string(midres[3]).charCodeAt(0)-codeA) : MACRO_SIZE-1) : startID;
@@ -551,28 +551,35 @@ package org.si.sion.sequencer ;
                             else        { _macroStrings[i]  = (_macroExpandDynamic) ? Std.string(res[4]) : _expandMacro(res[4]); }
                          i++;
 }
-                        midres = midrex.exec(str2);
+                        midres = midrex.match(str2);
                     }
                 }
                 
                 
-                res = seqrex.exec(mml);
+                res = seqrex.match(mml);
             }
-            
-            //HAXE PORT : need recode, haxe don't have a proper string.replace function
-           /* expmml = expmml.replace(reprex, 
-                function() : String {
-                    imax = (arguments[1].length > 0) ? (Std.int (arguments[1])-1) : (arguments[5].length > 0) ? (Std.int (arguments[5])-1) : 1;
+			
+			
+			
+			//TODO : HAXE PORT of this flash specific function, see original code in action before
+            reprex.map(expmml,function(er:EReg) : String {
+                   /* imax = (arguments[1].length > 0) ? (Std.int (arguments[1])-1) : (arguments[5].length > 0) ? (Std.int (arguments[5])-1) : 1;
                     if (imax > 256) imax = 256;
                     str2 = arguments[2];
                     if (arguments[3]) str2 += arguments[4];
                    i=0; str1="";
- while( i<imax){ str1 += str2;  i++;
-}
-                    str1 += arguments[2];
-                    return str1;
+					 while( i<imax){ str1 += str2;  i++;
+					}
+                    str1 += arguments[2];*/
+					
+					
+                   // return str1;
+				   return "";
+				   
+				   
                 }
-            );*/
+            );
+                
             
             
             return expmml;

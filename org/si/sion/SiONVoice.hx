@@ -17,7 +17,8 @@ package org.si.sion ;
     import org.si.sion.module.SiOPMWavePCMTable;
     import org.si.sion.module.SiOPMWaveSamplerData;
     import org.si.sion.module.SiOPMWaveSamplerTable;
-	import flash.utils.RegExp;
+	import EReg;
+	//import flash.utils.RegExp;
     
     
     
@@ -155,9 +156,9 @@ package org.si.sion ;
         public function setByMML(mml:String) : Int {
             
             initialize();
-            var rexNum:RegExp = new RegExp("(#[A-Z]*@)\\s*(\\d+)\\s*{(.*?)}(.*?);", "ms"),
-                rexNam:RegExp = new RegExp("^.*?(//\\s*(.+?))?[\\n\\r]"),
-                res:Dynamic = rexNum.exec(mml);
+            var rexNum:EReg = new EReg("(#[A-Z]*@)\\s*(\\d+)\\s*{(.*?)}(.*?);", "ms"),
+                rexNam:EReg = new EReg("^.*?(//\\s*(.+?))?[\\n\\r]",""),
+                res:Dynamic = rexNum.match(mml);
             if (res) {
                 var cmd:String = Std.string(res[1]),
                     prm:String = Std.string(res[3]),
@@ -174,7 +175,7 @@ package org.si.sion ;
                 default: return -1;
                 }
                 Translator.parseVoiceSetting(this, pfx);
-                res = rexNam.exec(prm);
+                res = rexNam.match(prm);
                 name = (res && res[2]) ? Std.string(res[2]) : "";
                 return voiceIndex;
             }

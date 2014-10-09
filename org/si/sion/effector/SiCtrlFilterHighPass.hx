@@ -9,7 +9,7 @@ package org.si.sion.effector ;
     class SiCtrlFilterHighPass extends SiCtrlFilterBase
     {
         
-        function new(cutoff:Float=1, resonance:Float=0)
+        public function new(cutoff:Float=1, resonance:Float=0)
         {
             initialize();
             control(cutoff, resonance);

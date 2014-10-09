@@ -22,7 +22,7 @@ package org.si.sion.utils ;
         static public function logTrans(data:Sound, dst: Array<Int>=null, dstChannelCount:Int=2, sampleMax:Int=1048576, startPosition:Int=0, maximize:Bool=true) : Array<Int>
         {
             var wave:ByteArray = new ByteArray();
-            var samples:Int = Std.int(data.extract(wave, sampleMax, startPosition));
+            //var samples:Int = Std.int(data.extract(wave, sampleMax, startPosition)); No Sound.extract
             return logTransByteArray(wave, dst, dstChannelCount, maximize);
         }
         
@@ -121,7 +121,7 @@ package org.si.sion.utils ;
         static public function extract(src:Sound, dst: Array<Float>=null, dstChannelCount:Int=1, length:Int=1048576, startPosition:Int=-1) : Array<Float>
         {
             var wave:ByteArray = new ByteArray(), i:Int, imax:Int;
-            src.extract(wave, length, startPosition);
+            //src.extract(wave, length, startPosition); HAXE No Sound.extract
             if (dst == null) dst = new Array<Float>();
             wave.position = 0;
             
@@ -322,9 +322,10 @@ package org.si.sion.utils ;
             imax = 1152;
             ms = 0;
            extracted=0;
- while( imax==1152){
-                wave.length = 0;
-                imax = Std.int(src.extract(wave, 1152, sp));
+ while ( imax == 1152) {
+				wave.clear();
+				
+               // imax = Std.int(src.extract(wave, 1152, sp)); //no Sound.Extract
                 wave.position = 0;
                i=0;
  while( i<imax){
@@ -358,7 +359,8 @@ package org.si.sion.utils ;
             
            extracted=0;
  while( extracted<maxLength){
-                imax = Std.int(src.extract(wave, 1152, sp));
+               // imax = Std.int(src.extract(wave, 1152, sp)); No Sound.extract
+			   imax = 0;
                 wave.position = 0;
                i=0;
  while( i<imax){
