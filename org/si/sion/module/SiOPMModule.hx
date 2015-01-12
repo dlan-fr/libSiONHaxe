@@ -105,7 +105,7 @@ package org.si.sion.module ;
             
             if (_bufferLength != bufferLength) {
                 _bufferLength = bufferLength;
-               // outputStream.buffer.length = bufferLength<<1; HAXEPORT
+				outputStream.buffer[(bufferLength << 1) - 1] = 0;
                i=0;
  while( i<PIPE_SIZE){
                     SLLint.freeRing(_pipeBuffer[i]);

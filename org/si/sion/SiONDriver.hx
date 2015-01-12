@@ -1467,12 +1467,10 @@ package org.si.sion ;
         
         private function _streaming(e:SampleDataEvent) : Void
         {
-			trace("streaming driver");
             var buffer:ByteArray = e.data, extracted:Int, 
                 output: Array<Float> = module.output(), 
                 imax:Int, i:Int, event:SiONEvent;
-
-            
+			
             if (_soundChannel != null) {
                 _latency = e.position * 0.022675736961451247 - _soundChannel.position;
             }
@@ -1488,20 +1486,20 @@ package org.si.sion ;
 				}
 				
                 if (_isPaused || _suspendStreaming) {
-                    
+                    // fill silence
                     _fillzero(e.data);
                 } else {
-                    
+                     // process starting time
                     var t:Int = Lib.getTimer();
                     
-                    
+                    // processing
                     module._beginProcess();
                     effector._beginProcess();
                     sequencer._process();
                     effector._endProcess();
                     module._endProcess();
                     
-                    
+                    // calculate the average of processing time
                     _timePrevStream = t;
                     _timeProcessTotal -= _timeProcessData.i;
                     _timeProcessData.i = Lib.getTimer() - t;
@@ -1509,15 +1507,22 @@ package org.si.sion ;
                     _timeProcessData   = _timeProcessData.next;
                     _timeProcess = Std.int(_timeProcessTotal * _timeProcessAveRatio);
                     
-                    
-                    imax = output.length;
-                   i=0;
- while( i<imax){
-                        event = new SiONEvent(SiONEvent.STREAM, this, buffer, true);
-                        dispatchEvent(event);
-                        if (event.isDefaultPrevented()) stop();   
-                     i++;
-}
+                    // write samples
+                     imax = output.length;
+                     i=0;
+					 while ( i < imax) 
+					 {
+						  buffer.writeFloat(output[i]);
+						  i++;
+					 }
+					 
+					if ( _dispatchStreamEvent)
+					{
+						event = new SiONEvent(SiONEvent.STREAM, this, buffer, true);
+						dispatchEvent(event);
+						if (event.isDefaultPrevented()) stop();   
+									
+					}
                     
                     
                     if (!_isFinishSeqDispatched && sequencer.isSequenceFinished()) {
