@@ -206,7 +206,7 @@ package org.si.sion ;
         private var _prevFrameTime:Int;         
         private var _frameRate:Int;             
         
-        private var _eventListenerPrior:Int;    
+        private var _eventListenerPrior:Bool;    
         private var _listenEvent:Int;           
         
         private var _midiModule:MIDIModule;                 
@@ -456,7 +456,7 @@ package org.si.sion ;
             _soundTransform.pan = 0;
             _soundTransform.volume = _masterVolume * _faderVolume;
             
-            _eventListenerPrior = 1;
+            _eventListenerPrior = false;
             _trackEventQueue = new Array<SiONTrackEvent>();
             
             _queueInterval = 500;
@@ -478,7 +478,7 @@ package org.si.sion ;
             _soundChannel = null;
             
             
-            _sound.addEventListener("sampleData", _streaming);
+            _sound.addEventListener(SampleDataEvent.SAMPLE_DATA, _streaming);
             
             
             _mutex = this;
@@ -757,7 +757,7 @@ package org.si.sion ;
         public function fadeIn(time:Float) : Void
         {
             _fader.setFade(_fadeVolume, 0, 1, Std.int(time * _sampleRate / _bufferLength));
-            _dispatchFadingEvent = (hasEventListener(SiONEvent.FADE_PROGRESS));
+            _dispatchFadingEvent = (Lib.current.hasEventListener(SiONEvent.FADE_PROGRESS));
         }
         
         
@@ -765,7 +765,7 @@ package org.si.sion ;
         public function fadeOut(time:Float) : Void
         {
             _fader.setFade(_fadeVolume, 1, 0, Std.int(time * _sampleRate / _bufferLength));
-            _dispatchFadingEvent = (hasEventListener(SiONEvent.FADE_PROGRESS));
+            _dispatchFadingEvent = (Lib.current.hasEventListener(SiONEvent.FADE_PROGRESS));
         }
         
         
@@ -792,7 +792,7 @@ package org.si.sion ;
         
         public function forceDispatchStreamEvent(dispatch:Bool=true) : Void
         {
-            _dispatchStreamEvent = dispatch || (hasEventListener(SiONEvent.STREAM));
+            _dispatchStreamEvent = dispatch || (Lib.current.hasEventListener(SiONEvent.STREAM));
         }
         
         
@@ -1116,7 +1116,7 @@ package org.si.sion ;
         private function _queue_addAllEventListners() : Void
         {
             if (_listenEvent != NO_LISTEN) throw errorDriverBusy(listen_queue);
-            addEventListener(Event.ENTER_FRAME, _queue_onEnterFrame, false, _eventListenerPrior);
+            Lib.current.addEventListener(Event.ENTER_FRAME, _queue_onEnterFrame,false,_eventListenerPrior);
             _listenEvent = listen_queue;
         }
         
@@ -1125,10 +1125,10 @@ package org.si.sion ;
         private function _process_addAllEventListners() : Void
         {
             if (_listenEvent != NO_LISTEN) throw errorDriverBusy(listen_process);
-            addEventListener(Event.ENTER_FRAME, _process_onEnterFrame, false, _eventListenerPrior);
-            if (hasEventListener(SiONTrackEvent.BEAT)) sequencer._setBeatCallback(_callbackBeat);
+            Lib.current.addEventListener(Event.ENTER_FRAME, _process_onEnterFrame,false,_eventListenerPrior);
+            if (Lib.current.hasEventListener(SiONTrackEvent.BEAT)) sequencer._setBeatCallback(_callbackBeat);
             else sequencer._setBeatCallback(null);
-            _dispatchStreamEvent = (hasEventListener(SiONEvent.STREAM));
+            _dispatchStreamEvent = (Lib.current.hasEventListener(SiONEvent.STREAM));
             _prevFrameTime = Lib.getTimer();
             _listenEvent = listen_process;
         }
@@ -1139,10 +1139,10 @@ package org.si.sion ;
         {
             switch (_listenEvent) {
             case listen_queue:
-                removeEventListener(Event.ENTER_FRAME, _queue_onEnterFrame);
+                Lib.current.removeEventListener(Event.ENTER_FRAME, _queue_onEnterFrame);
 
             case listen_process:
-                removeEventListener(Event.ENTER_FRAME, _process_onEnterFrame);
+                Lib.current.removeEventListener(Event.ENTER_FRAME, _process_onEnterFrame);
                 sequencer._setBeatCallback(null);
                 _dispatchStreamEvent = false;
 
@@ -1426,7 +1426,6 @@ package org.si.sion ;
             _frameRate = t - _prevFrameTime;
             _prevFrameTime = t;
             
-            
             if (_suspendStreaming) {
                 _onSuspendStream();
             } else {
@@ -1468,6 +1467,7 @@ package org.si.sion ;
         
         private function _streaming(e:SampleDataEvent) : Void
         {
+			trace("streaming driver");
             var buffer:ByteArray = e.data, extracted:Int, 
                 output: Array<Float> = module.output(), 
                 imax:Int, i:Int, event:SiONEvent;
@@ -1567,11 +1567,11 @@ package org.si.sion ;
         
         public function _checkMIDIEventListeners() : Int
         {
-            return ((hasEventListener(SiONMIDIEvent.NOTE_ON))?1:0) | 
-                   ((hasEventListener(SiONMIDIEvent.NOTE_OFF))?2:0) | 
-                   ((hasEventListener(SiONMIDIEvent.CONTROL_CHANGE))?4:0) | 
-                   ((hasEventListener(SiONMIDIEvent.PROGRAM_CHANGE))?8:0) | 
-                   ((hasEventListener(SiONMIDIEvent.PITCH_BEND))?16:0);
+            return ((Lib.current.hasEventListener(SiONMIDIEvent.NOTE_ON))?1:0) | 
+                   ((Lib.current.hasEventListener(SiONMIDIEvent.NOTE_OFF))?2:0) | 
+                   ((Lib.current.hasEventListener(SiONMIDIEvent.CONTROL_CHANGE))?4:0) | 
+                   ((Lib.current.hasEventListener(SiONMIDIEvent.PROGRAM_CHANGE))?8:0) | 
+                   ((Lib.current.hasEventListener(SiONMIDIEvent.PITCH_BEND))?16:0);
         }
         
         
