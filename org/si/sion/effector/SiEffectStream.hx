@@ -34,7 +34,8 @@ package org.si.sion.effector ;
         
         private var _outputStreams: Array<SiOPMStream> = new Array<SiOPMStream>();
         
-        
+        private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
         
     
@@ -83,7 +84,7 @@ package org.si.sion.effector ;
            i=0;
  while( i<imax){
                 v = param[i];
-                _volumes[i] = (v != -2147483648 ) ? (v * 0.0078125) : 0;
+                _volumes[i] = (v != INT_MIN_VALUE ) ? (v * 0.0078125) : 0;
              i++;
 }
            _hasEffectSend=false; i=1;

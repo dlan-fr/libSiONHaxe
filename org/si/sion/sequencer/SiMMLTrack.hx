@@ -20,7 +20,8 @@ package org.si.sion.sequencer ;
     {
     
         
-        
+        private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
         
     
@@ -1169,7 +1170,7 @@ package org.si.sion.sequencer ;
         public function _setChannelParameters(param: Array<Int>) : MMLSequence
         {
             var ret:MMLSequence = null;
-            if (param[0] != -2147483648 ) {
+            if (param[0] != INT_MIN_VALUE ) {
                 ret = _channelModuleSetting.selectTone(this, param[0]);
                 _voiceIndex = param[0];
             }

@@ -24,7 +24,8 @@ package org.si.sion.module.channels ;
         inline static private var ks_seed_fm:Int = 1;
         inline static private var ks_seed_pcm:Int = 2;
         
-        
+        private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
     
     
@@ -117,8 +118,8 @@ package org.si.sion.module.channels ;
         
         override public function setParameters(param: Array<Int>) : Void
         {
-            _ks_seedType = (param[0] == -2147483648 ) ? 0 : param[0];
-            _ks_seedIndex =(param[1] == -2147483648 ) ? 0 : param[1];
+            _ks_seedType = (param[0] == INT_MIN_VALUE ) ? 0 : param[0];
+            _ks_seedIndex =(param[1] == INT_MIN_VALUE ) ? 0 : param[1];
             
             switch (_ks_seedType) {
             case ks_seed_fm:
@@ -138,7 +139,7 @@ package org.si.sion.module.channels ;
                 
                 
                 setSiOPMParameters(param[1], param[2], 0, 63, 15, param[3], 0, 0, 1, 0, 0, 0, 0, param[4]);
-                activeOperator.pgType((param[5] == -2147483648) ? SiOPMTable.PG_NOISE_PINK : param[5]);
+                activeOperator.pgType((param[5] == INT_MIN_VALUE) ? SiOPMTable.PG_NOISE_PINK : param[5]);
                 activeOperator.ptType(_table.getWaveTable(activeOperator.get_pgType()).defaultPTType);
 
             }

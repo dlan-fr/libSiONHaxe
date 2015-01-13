@@ -479,8 +479,7 @@ package org.si.sion ;
             
             
             _sound.addEventListener(SampleDataEvent.SAMPLE_DATA, _streaming);
-            
-            
+						
             _mutex = this;
 			
 			super();
@@ -603,7 +602,7 @@ package org.si.sion ;
             if (Std.is(sound,Sound)) {
                 if (sound.bytesTotal == 0 || sound.bytesLoaded != sound.bytesTotal) {
                     _loadingSoundList.push(sound);
-                    sound.addEventListener(Event.COMPLETE,        _onSoundEvent, false, prior);
+                    sound.addEventListener(Event.SOUND_COMPLETE,        _onSoundEvent, false, prior);
                     sound.addEventListener(IOErrorEvent.IO_ERROR, _onSoundEvent, false, prior);
                     return true;
                 }
@@ -611,7 +610,7 @@ package org.si.sion ;
             if (Std.is(sound,SoundLoader)) {
                 if (sound.loadingFileCount > 0) {
                     _loadingSoundList.push(sound);
-                    sound.addEventListener(Event.COMPLETE,   _onSoundEvent, false, prior);
+                    sound.addEventListener(Event.SOUND_COMPLETE,   _onSoundEvent, false, prior);
                     sound.addEventListener(ErrorEvent.ERROR, _onSoundEvent, false, prior);
                     return true;
                 }
@@ -1125,7 +1124,9 @@ package org.si.sion ;
         private function _process_addAllEventListners() : Void
         {
             if (_listenEvent != NO_LISTEN) throw errorDriverBusy(listen_process);
-            Lib.current.addEventListener(Event.ENTER_FRAME, _process_onEnterFrame,false,_eventListenerPrior);
+            Lib.current.addEventListener(Event.ENTER_FRAME, _process_onEnterFrame, false, _eventListenerPrior);
+			
+			
             if (Lib.current.hasEventListener(SiONTrackEvent.BEAT)) sequencer._setBeatCallback(_callbackBeat);
             else sequencer._setBeatCallback(null);
             _dispatchStreamEvent = (Lib.current.hasEventListener(SiONEvent.STREAM));
@@ -1140,12 +1141,11 @@ package org.si.sion ;
             switch (_listenEvent) {
             case listen_queue:
                 Lib.current.removeEventListener(Event.ENTER_FRAME, _queue_onEnterFrame);
-
+					
             case listen_process:
                 Lib.current.removeEventListener(Event.ENTER_FRAME, _process_onEnterFrame);
                 sequencer._setBeatCallback(null);
                 _dispatchStreamEvent = false;
-
             }
             _listenEvent = NO_LISTEN;
         }
@@ -1154,11 +1154,12 @@ package org.si.sion ;
         
         private function _onSoundEvent(e:Event) : Void
         {
+			trace("sound event!");
             if (Std.is(e.target,Sound)) {
-                e.target.removeEventListener(Event.COMPLETE,        _onSoundEvent);
+                e.target.removeEventListener(Event.SOUND_COMPLETE,        _onSoundEvent);
                 e.target.removeEventListener(IOErrorEvent.IO_ERROR, _onSoundEvent);
             } else { 
-                e.target.removeEventListener(Event.COMPLETE,   _onSoundEvent);
+                e.target.removeEventListener(Event.SOUND_COMPLETE,   _onSoundEvent);
                 e.target.removeEventListener(ErrorEvent.ERROR, _onSoundEvent);
             }
             var i:Int = _loadingSoundList.indexOf(e.target);
@@ -1516,6 +1517,9 @@ package org.si.sion ;
 						  i++;
 					 }
 					 
+					 if (imax == 0)
+						trace("WARNING, no sample to write, streaming will stop");
+					 
 					if ( _dispatchStreamEvent)
 					{
 						event = new SiONEvent(SiONEvent.STREAM, this, buffer, true);
@@ -1551,7 +1555,7 @@ package org.si.sion ;
                 else dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, e.message));
             }
         }
-        
+
         
         
         private function _fillzero(buffer:ByteArray) : Void {

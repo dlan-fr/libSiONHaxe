@@ -35,6 +35,9 @@ package org.si.sion.module.channels ;
 		 inline static private var EG_SUSTAIN:Int = 3;
 		 inline static private var EG_RELEASE:Int = 4;
 		 inline static private var EG_OFF:Int = 5;
+		 
+		 private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
         
         
@@ -219,7 +222,7 @@ package org.si.sion.module.channels ;
            i=0;
  while( i<imax){
                 v = param[i];
-                _volumes[i] = (v != -2147483648) ? (v * 0.0078125) : 0;
+                _volumes[i] = (v != INT_MIN_VALUE) ? (v * 0.0078125) : 0;
              i++;
 }
            _hasEffectSend=false; i=1;
@@ -338,9 +341,9 @@ package org.si.sion.module.channels ;
             _filter_eg_time  [EG_ATTACK]  = _table.filter_eg_rate[ar & 63];
             _filter_eg_time  [EG_DECAY1]  = _table.filter_eg_rate[dr1 & 63];
             _filter_eg_time  [EG_DECAY2]  = _table.filter_eg_rate[dr2 & 63];
-            _filter_eg_time  [EG_SUSTAIN] = Std.int(2147483648);
+            _filter_eg_time  [EG_SUSTAIN] = INT_MAX_VALUE;
             _filter_eg_time  [EG_RELEASE] = _table.filter_eg_rate[rr & 63];
-            _filter_eg_time  [EG_OFF]     = Std.int(2147483648);
+            _filter_eg_time  [EG_OFF]     = INT_MAX_VALUE;
             
             var res:Int = (resonance<0) ? 0 : (resonance>9) ? 9 : resonance;
             _resonance = (1 << (9 - res)) * 0.001953125;   
@@ -623,14 +626,14 @@ package org.si.sion.module.channels ;
             while (len >= step) {
                 
                i=0;
- while( i<step){
+				while( i<step){
                     variables[2] = cast(pointer.i,Float) - variables[0] - variables[1] * fb;
                     variables[1] += variables[2] * cut;
                     variables[0] += variables[1] * cut;
                     pointer.i = Std.int(variables[_filterType]);
                     pointer   = pointer.next;
                  i++;
-}
+				}
                 len -= step;
                 
                 
@@ -648,14 +651,14 @@ package org.si.sion.module.channels ;
             
             
            i=0;
- while( i<len){
+			while( i<len){
                 variables[2] = cast(pointer.i,Float) - variables[0] - variables[1] * fb;
                 variables[1] += variables[2] * cut;
                 variables[0] += variables[1] * cut;
                 pointer.i = Std.int(variables[_filterType]);
                 pointer   = pointer.next;
              i++;
-}
+		}
             
             
             _prevStepRemain = _filter_eg_step - len;
@@ -698,7 +701,7 @@ package org.si.sion.module.channels ;
             case EG_SUSTAIN:
                 
                 _filter_eg_state = EG_SUSTAIN;
-                _filter_eg_step  = Std.int(2147483648);
+                _filter_eg_step  = INT_MAX_VALUE;
                 _filter_eg_next  = _cutoff + 1;
                 _filter_eg_cutoff_inc = 0;
    
@@ -709,7 +712,7 @@ package org.si.sion.module.channels ;
             case EG_OFF:
                 
                 _filter_eg_state = EG_OFF;
-                _filter_eg_step  = Std.int(2147483648);
+                _filter_eg_step  = INT_MAX_VALUE;
                 _filter_eg_next  = _cutoff + 1;
                 _filter_eg_cutoff_inc = 0;
        

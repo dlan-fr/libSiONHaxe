@@ -31,7 +31,8 @@ package org.si.sion.sequencer ;
         
         
         
-        
+        private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
     
     
         static private var PARAM_MAX:Int = 16;                
@@ -1094,8 +1095,8 @@ package org.si.sion.sequencer ;
         private function _onQuantCount(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 2);
-            _p[0] = (_p[0] == -2147483648 ) ? 0 : (_p[0] * Std.int(setting.resolution / setting.maxQuantCount));
-            _p[1] = (_p[1] == -2147483648 ) ? 0 : (_p[1] * Std.int(setting.resolution / setting.maxQuantCount));
+            _p[0] = (_p[0] == INT_MIN_VALUE ) ? 0 : (_p[0] * Std.int(setting.resolution / setting.maxQuantCount));
+            _p[1] = (_p[1] == INT_MIN_VALUE ) ? 0 : (_p[1] * Std.int(setting.resolution / setting.maxQuantCount));
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_QUANTIZE) != 0) return e.next;  
             _currentTrack.quantCount = calcSampleCount(_p[0]);           
             _currentTrack.keyOnDelay = calcSampleCount(_p[1]);           
@@ -1105,28 +1106,28 @@ package org.si.sion.sequencer ;
         
         private function _onEventMask(e:MMLEvent) : MMLEvent
         {
-            _currentTrack.eventMask = (e.data != -2147483648 ) ? e.data : 0;
+            _currentTrack.eventMask = (e.data != INT_MIN_VALUE ) ? e.data : 0;
             return e.next;
         }
 
         
         private function _onDetune(e:MMLEvent) : MMLEvent
         {
-            _currentTrack.pitchShift = (e.data == -2147483648 ) ? 0 : e.data;
+            _currentTrack.pitchShift = (e.data == INT_MIN_VALUE ) ? 0 : e.data;
             return e.next;
         }
     
         
         private function _onKeyTrans(e:MMLEvent) : MMLEvent
         {
-            _currentTrack.noteShift = (e.data == -2147483648 ) ? 0 : e.data;
+            _currentTrack.noteShift = (e.data == INT_MIN_VALUE ) ? 0 : e.data;
             return e.next;
         }
     
         
         private function _onRelativeDetune(e:MMLEvent) : MMLEvent
         {
-            _currentTrack.pitchShift += (e.data == -2147483648 ) ? 0 : e.data;
+            _currentTrack.pitchShift += (e.data == INT_MIN_VALUE ) ? 0 : e.data;
             return e.next;
         }
 
@@ -1136,7 +1137,7 @@ package org.si.sion.sequencer ;
         
         private function _onEnvelopFPS(e:MMLEvent) : MMLEvent
         {
-            var frame:Int = (e.data == -2147483648  || e.data == 0) ? 60 : e.data;
+            var frame:Int = (e.data == INT_MIN_VALUE  || e.data == 0) ? 60 : e.data;
             if (frame > 1000) frame = 1000;
             _currentTrack.setEnvelopFPS(frame);
             return e.next;
@@ -1147,7 +1148,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setToneEnvelop(1, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1158,7 +1159,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setAmplitudeEnvelop(1, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1169,7 +1170,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setAmplitudeEnvelop(1, _table.getEnvelopTable(idx), _p[1], true);
             return e.next;
@@ -1180,7 +1181,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setPitchEnvelop(1, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1191,7 +1192,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setNoteEnvelop(1, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1202,7 +1203,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setFilterEnvelop(1, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1213,7 +1214,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setToneEnvelop(0, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1224,7 +1225,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setAmplitudeEnvelop(0, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1235,7 +1236,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setPitchEnvelop(0, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1246,7 +1247,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setNoteEnvelop(0, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1257,7 +1258,7 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if((_currentTrack.eventMask & SiMMLTrack.MASK_ENVELOP) != 0) return e.next;   
-            if (_p[1] == -2147483648 ) _p[1] = 1;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 1;
             var idx:Int = (_p[0]>=0 && _p[0]<255) ? _p[0] : -1;
             _currentTrack.setFilterEnvelop(0, _table.getEnvelopTable(idx), _p[1]);
             return e.next;
@@ -1270,16 +1271,16 @@ package org.si.sion.sequencer ;
         private function _onFilter(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 10);
-            var cut:Int = (_p[0] == -2147483648 ) ? 128 : _p[0],
-                res:Int = (_p[1] == -2147483648 ) ?   0 : _p[1],
-                ar :Int = (_p[2] == -2147483648 ) ?   0 : _p[2],
-                dr1:Int = (_p[3] == -2147483648 ) ?   0 : _p[3],
-                dr2:Int = (_p[4] == -2147483648 ) ?   0 : _p[4],
-                rr :Int = (_p[5] == -2147483648 ) ?   0 : _p[5],
-                dc1:Int = (_p[6] == -2147483648 ) ? 128 : _p[6],
-                dc2:Int = (_p[7] == -2147483648 ) ?  64 : _p[7],
-                sc :Int = (_p[8] == -2147483648 ) ?  32 : _p[8],
-                rc :Int = (_p[9] == -2147483648 ) ? 128 : _p[9];
+            var cut:Int = (_p[0] == INT_MIN_VALUE ) ? 128 : _p[0],
+                res:Int = (_p[1] == INT_MIN_VALUE ) ?   0 : _p[1],
+                ar :Int = (_p[2] == INT_MIN_VALUE ) ?   0 : _p[2],
+                dr1:Int = (_p[3] == INT_MIN_VALUE ) ?   0 : _p[3],
+                dr2:Int = (_p[4] == INT_MIN_VALUE ) ?   0 : _p[4],
+                rr :Int = (_p[5] == INT_MIN_VALUE ) ?   0 : _p[5],
+                dc1:Int = (_p[6] == INT_MIN_VALUE ) ? 128 : _p[6],
+                dc2:Int = (_p[7] == INT_MIN_VALUE ) ?  64 : _p[7],
+                sc :Int = (_p[8] == INT_MIN_VALUE ) ?  32 : _p[8],
+                rc :Int = (_p[9] == INT_MIN_VALUE ) ? 128 : _p[9];
             _currentTrack.channel.setSVFilter(cut, res, ar, dr1, dr2, rr, dc1, dc2, sc, rc);
             return e.next;
         }
@@ -1301,9 +1302,9 @@ package org.si.sion.sequencer ;
                 if (env != null) _currentTrack.channel.initializeLFO(-1, env.toVector(256, 0, 255));
                 else _currentTrack.channel.initializeLFO(SiOPMTable.LFO_WAVE_TRIANGLE);
             } else {
-                _currentTrack.channel.initializeLFO((_p[1] == -2147483648 ) ? SiOPMTable.LFO_WAVE_TRIANGLE : _p[1]);
+                _currentTrack.channel.initializeLFO((_p[1] == INT_MIN_VALUE ) ? SiOPMTable.LFO_WAVE_TRIANGLE : _p[1]);
             }
-            _currentTrack.channel.setLFOCycleTime((_p[0] == -2147483648 ) ? 333 : _p[0]*1000/60);
+            _currentTrack.channel.setLFOCycleTime((_p[0] == INT_MIN_VALUE ) ? 333 : _p[0]*1000/60);
             return e.next;
         }
         
@@ -1312,10 +1313,10 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 4);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_MODULATE) != 0) return e.next;   
-            if (_p[0] == -2147483648 ) _p[0] = 0;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
-            if (_p[2] == -2147483648 ) _p[2] = 0;
-            if (_p[3] == -2147483648 ) _p[3] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 0;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
+            if (_p[2] == INT_MIN_VALUE ) _p[2] = 0;
+            if (_p[3] == INT_MIN_VALUE ) _p[3] = 0;
             _currentTrack.setModulationEnvelop(true, _p[0], _p[1], _p[2], _p[3]);
             return e.next;
         }
@@ -1325,10 +1326,10 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 4);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_MODULATE) != 0) return e.next;   
-            if (_p[0] == -2147483648 ) _p[0] = 0;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
-            if (_p[2] == -2147483648 ) _p[2] = 0;
-            if (_p[3] == -2147483648 ) _p[3] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 0;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
+            if (_p[2] == INT_MIN_VALUE ) _p[2] = 0;
+            if (_p[3] == INT_MIN_VALUE ) _p[3] = 0;
             _currentTrack.setModulationEnvelop(false, _p[0], _p[1], _p[2], _p[3]);
             return e.next;
         }
@@ -1336,7 +1337,7 @@ package org.si.sion.sequencer ;
         
         private function _onPortament(e:MMLEvent) : MMLEvent
         {
-            if (e.data == -2147483648 ) e.data = 0;
+            if (e.data == INT_MIN_VALUE ) e.data = 0;
             _currentTrack.setPortament(e.data);
             return e.next;
         }
@@ -1365,8 +1366,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, SiOPMModule.STREAM_SEND_SIZE);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_VOLUME) != 0) return e.next;  
-            _currentTrack._vcommandShift = (_p[1] == -2147483648 ) ? 4 : _p[1];
-            _currentTrack.velocityMode((_p[0] == -2147483648 ) ? 0 : _p[0]);
+            _currentTrack._vcommandShift = (_p[1] == INT_MIN_VALUE ) ? 4 : _p[1];
+            _currentTrack.velocityMode((_p[0] == INT_MIN_VALUE ) ? 0 : _p[0]);
             return e.next;
         }
     
@@ -1374,7 +1375,7 @@ package org.si.sion.sequencer ;
         private function _onExpression(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_VOLUME) != 0) return e.next; 
-            var x:Int = (e.data == -2147483648 ) ? 128 : e.data;                
+            var x:Int = (e.data == INT_MIN_VALUE ) ? 128 : e.data;                
             _currentTrack.expression(x);                                        
             return e.next;
         }
@@ -1383,7 +1384,7 @@ package org.si.sion.sequencer ;
         private function _onExpressionSetting(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_VOLUME) != 0) return e.next;  
-            _currentTrack.expressionMode((e.data == -2147483648 ) ? 0 : e.data);
+            _currentTrack.expressionMode((e.data == INT_MIN_VALUE ) ? 0 : e.data);
             return e.next;
         }
 
@@ -1400,7 +1401,7 @@ package org.si.sion.sequencer ;
         private function _onPan(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_PAN) != 0) return e.next;            
-            _currentTrack.channel.pan((e.data == -2147483648 ) ? 0 : (e.data<<4)-64);  
+            _currentTrack.channel.pan((e.data == INT_MIN_VALUE ) ? 0 : (e.data<<4)-64);  
             return e.next;
         }
 
@@ -1408,7 +1409,7 @@ package org.si.sion.sequencer ;
         private function _onFinePan(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_PAN) != 0) return e.next;      
-            _currentTrack.channel.pan((e.data == -2147483648 ) ? 0 : (e.data));  
+            _currentTrack.channel.pan((e.data == INT_MIN_VALUE ) ? 0 : (e.data));  
             return e.next;
         }
         
@@ -1416,8 +1417,8 @@ package org.si.sion.sequencer ;
         private function _onInput(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 2);
-            if (_p[0] == -2147483648 ) _p[0] = 5;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 5;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.channel.setInput(_p[0], _p[1]);
             return e.next;
         }
@@ -1426,8 +1427,8 @@ package org.si.sion.sequencer ;
         private function _onOutput(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 2);
-            if (_p[0] == -2147483648 ) _p[0] = 2;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 2;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.channel.setOutput(_p[0], _p[1]);
             return e.next;
         }
@@ -1436,8 +1437,8 @@ package org.si.sion.sequencer ;
         private function _onRingModulation(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 2);
-            if (_p[0] == -2147483648 ) _p[0] = 4;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 4;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.channel.setRingModulation(_p[0], _p[1]);
             return e.next;
         }
@@ -1459,9 +1460,9 @@ package org.si.sion.sequencer ;
         private function _setEventTrigger(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 3);
-            var id     :Int = (_p[0] != -2147483648 ) ? _p[0] : 0;
-            var typeOn :Int = (_p[1] != -2147483648 ) ? _p[1] : 1;
-            var typeOff:Int = (_p[2] != -2147483648 ) ? _p[2] : 1;
+            var id     :Int = (_p[0] != INT_MIN_VALUE ) ? _p[0] : 0;
+            var typeOn :Int = (_p[1] != INT_MIN_VALUE ) ? _p[1] : 1;
+            var typeOff:Int = (_p[2] != INT_MIN_VALUE ) ? _p[2] : 1;
             _currentTrack.setEventTrigger(id, typeOn, typeOff);
             return e.next;
         }
@@ -1471,8 +1472,8 @@ package org.si.sion.sequencer ;
         private function _dispatchEvent(e:MMLEvent) : MMLEvent
         {
             e = e.getParameters(_p, 2);
-            var id     :Int = (_p[0] != -2147483648 ) ? _p[0] : 0;
-            var typeOn :Int = (_p[1] != -2147483648 ) ? _p[1] : 1;
+            var id     :Int = (_p[0] != INT_MIN_VALUE ) ? _p[0] : 0;
+            var typeOn :Int = (_p[1] != INT_MIN_VALUE ) ? _p[1] : 1;
             _currentTrack.dispatchNoteOnEvent(id, typeOn);
             return e.next;
         }
@@ -1481,7 +1482,7 @@ package org.si.sion.sequencer ;
         
         private function _onClock(e:MMLEvent) : MMLEvent
         {
-            _currentTrack.channel.setFrequencyRatio((e.data == -2147483648 ) ? 100 : (e.data));
+            _currentTrack.channel.setFrequencyRatio((e.data == INT_MIN_VALUE ) ? 100 : (e.data));
             return e.next;
         }
         
@@ -1491,8 +1492,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            var cnt:Int = (_p[0] != -2147483648 ) ? _p[0] : 0;
-            var alg:Int = (_p[1] != -2147483648 ) ? _p[1] : _table.alg_init[cnt];
+            var cnt:Int = (_p[0] != INT_MIN_VALUE ) ? _p[0] : 0;
+            var alg:Int = (_p[1] != INT_MIN_VALUE ) ? _p[1] : _table.alg_init[cnt];
             _currentTrack.channel.setAlgorism(cnt, alg);
             return e.next;
         }
@@ -1515,8 +1516,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            var fb :Int = (_p[0] != -2147483648 ) ? _p[0] : 0;
-            var fbc:Int = (_p[1] != -2147483648 ) ? _p[1] : 0;
+            var fb :Int = (_p[0] != INT_MIN_VALUE ) ? _p[0] : 0;
+            var fbc:Int = (_p[1] != INT_MIN_VALUE ) ? _p[1] : 0;
             _currentTrack.channel.setFeedBack(fb, fbc);
             return e.next;
         }
@@ -1525,7 +1526,7 @@ package org.si.sion.sequencer ;
         private function _onSlotIndex(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            _currentTrack.channel.activeOperatorIndex((e.data == -2147483648 ) ? 4 : e.data);
+            _currentTrack.channel.activeOperatorIndex((e.data == INT_MIN_VALUE ) ? 4 : e.data);
             return e.next;
         }
 
@@ -1535,8 +1536,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            if (_p[0] != -2147483648 ) _currentTrack.channel.rr(_p[0]);
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] != INT_MIN_VALUE ) _currentTrack.channel.rr(_p[0]);
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.setReleaseSweep(_p[1]);
             return e.next;
         }
@@ -1545,7 +1546,7 @@ package org.si.sion.sequencer ;
         private function _onOpeTotalLevel(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            _currentTrack.channel.tl((e.data == -2147483648 ) ? 0 : e.data);
+            _currentTrack.channel.tl((e.data == INT_MIN_VALUE ) ? 0 : e.data);
             return e.next;
         }
         
@@ -1554,8 +1555,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            if (_p[0] == -2147483648 ) _p[0] = 0;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 0;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.channel.fmul((_p[0] << 7) + _p[1]);
             return e.next;
         }
@@ -1564,7 +1565,7 @@ package org.si.sion.sequencer ;
         private function _onOpeDetune(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            _currentTrack.channel.detune ( (e.data == -2147483648 ) ? 0 : e.data);
+            _currentTrack.channel.detune ( (e.data == INT_MIN_VALUE ) ? 0 : e.data);
             return e.next;
         }
         
@@ -1572,7 +1573,7 @@ package org.si.sion.sequencer ;
         private function _onOpePhase(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;     
-            var phase:Int = (e.data == -2147483648 ) ? 0 : e.data;
+            var phase:Int = (e.data == INT_MIN_VALUE ) ? 0 : e.data;
             _currentTrack.channel.phase ( phase);                            
             return e.next;
         }
@@ -1582,8 +1583,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            if (_p[0] == -2147483648 ) _p[0] = 0;
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] == INT_MIN_VALUE ) _p[0] = 0;
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.channel.fixedPitch ((_p[0] << 6) + _p[1]);
             return e.next;
         }
@@ -1592,7 +1593,7 @@ package org.si.sion.sequencer ;
         private function _onOpeSSGEnvelop(e:MMLEvent) : MMLEvent
         {
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            _currentTrack.channel.ssgec ((e.data == -2147483648 ) ? 0 : e.data);
+            _currentTrack.channel.ssgec ((e.data == INT_MIN_VALUE ) ? 0 : e.data);
             return e.next;
         }
         
@@ -1609,8 +1610,8 @@ package org.si.sion.sequencer ;
         {
             e = e.getParameters(_p, 2);
             if ((_currentTrack.eventMask & SiMMLTrack.MASK_OPERATOR) != 0) return e.next;      
-            if (_p[0] != -2147483648 ) _currentTrack.channel.setAllReleaseRate(_p[0]);
-            if (_p[1] == -2147483648 ) _p[1] = 0;
+            if (_p[0] != INT_MIN_VALUE ) _currentTrack.channel.setAllReleaseRate(_p[0]);
+            if (_p[1] == INT_MIN_VALUE ) _p[1] = 0;
             _currentTrack.setReleaseSweep(_p[1]);
             return e.next;
         }

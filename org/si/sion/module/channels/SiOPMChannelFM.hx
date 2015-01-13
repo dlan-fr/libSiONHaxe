@@ -24,7 +24,9 @@ package org.si.sion.module.channels ;
         inline static  private var PROC_SYN:Int = 6;
         inline static  private var PROC_AFM:Int = 7;
         inline static  private var PROC_PCM:Int = 8;
-
+		
+		private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
         
         
@@ -262,20 +264,20 @@ package org.si.sion.module.channels ;
         public function setSiOPMParameters(ar:Int, dr:Int, sr:Int, rr:Int, sl:Int, tl:Int, ksr:Int, ksl:Int, mul:Int, dt1:Int, detune:Int, ams:Int, phase:Int, fixNote:Int) : Void
         {
             var ope:SiOPMOperator = activeOperator;
-            if (ar      != -2147483648 ) ope.ar(ar);
-            if (dr      != -2147483648 ) ope.dr(dr);
-            if (sr      != -2147483648 ) ope.sr(sr);
-            if (rr      != -2147483648 ) ope.rr(rr);
-            if (sl      != -2147483648 ) ope.sl(sl);
-            if (tl      != -2147483648) ope.tl(tl);
-            if (ksr     != -2147483648 ) ope.ks(ksr);
-            if (ksl     != -2147483648 ) ope.ksl(ksl);
-            if (mul     != -2147483648 ) ope.mul(mul);
-            if (dt1     != -2147483648 ) ope.dt1(dt1);
-            if (detune  != -2147483648 ) ope.detune(detune);
-            if (ams     != -2147483648 ) ope.ams(ams);
-            if (phase   != -2147483648 ) ope.keyOnPhase(phase);
-            if (fixNote != -2147483648 ) ope.fixedPitchIndex(fixNote<<6);
+            if (ar      != INT_MIN_VALUE ) ope.ar(ar);
+            if (dr      != INT_MIN_VALUE ) ope.dr(dr);
+            if (sr      != INT_MIN_VALUE ) ope.sr(sr);
+            if (rr      != INT_MIN_VALUE ) ope.rr(rr);
+            if (sl      != INT_MIN_VALUE ) ope.sl(sl);
+            if (tl      != INT_MIN_VALUE) ope.tl(tl);
+            if (ksr     != INT_MIN_VALUE ) ope.ks(ksr);
+            if (ksl     != INT_MIN_VALUE ) ope.ksl(ksl);
+            if (mul     != INT_MIN_VALUE ) ope.mul(mul);
+            if (dt1     != INT_MIN_VALUE ) ope.dt1(dt1);
+            if (detune  != INT_MIN_VALUE ) ope.detune(detune);
+            if (ams     != INT_MIN_VALUE ) ope.ams(ams);
+            if (phase   != INT_MIN_VALUE ) ope.keyOnPhase(phase);
+            if (fixNote != INT_MIN_VALUE ) ope.fixedPitchIndex(fixNote<<6);
         }
         
         

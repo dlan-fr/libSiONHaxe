@@ -76,6 +76,8 @@ package org.si.sion.sequencer.base ;
         static private var _lastEvent       :MMLEvent = null;
         static private var _lastSequenceHead:MMLEvent = null;
         static private var _repeatStac:Array<Dynamic>          = [];
+		   private static inline var INT_MAX_VALUE = 2147483647;
+		private static inline var INT_MIN_VALUE = -2147483648;
         
         
         
@@ -427,7 +429,7 @@ package org.si.sion.sequencer.base ;
 			var codeC:Int = "c".charCodeAt(0);
 			
 			var __calcLength:Dynamic = function() : Int {
-                if (Std.string(res[REX_PARAM]).length == 0) return -2147483648 ;
+                if (Std.string(res[REX_PARAM]).length == 0) return INT_MIN_VALUE ;
                 var len:Int = Std.int(res[REX_PARAM]);
                 if (len == 0) return 0;
                 var iLength:Int = Std.int(_setting.resolution/len);
@@ -436,7 +438,7 @@ package org.si.sion.sequencer.base ;
             }
             
             
-            var __param:Dynamic = function(defaultValue:Int = -2147483648) : Int {
+            var __param:Dynamic = function(defaultValue:Int = INT_MIN_VALUE) : Int {
                 return (Std.string(res[REX_PARAM]).length > 0) ? Std.int(res[REX_PARAM]) : defaultValue;
             }
             
@@ -677,7 +679,7 @@ package org.si.sion.sequencer.base ;
         static private function __calcLength(iLength:Int, period:Int) : Int
         {
             
-            if (iLength == -2147483648) iLength = _staticLength;
+            if (iLength == INT_MIN_VALUE) iLength = _staticLength;
             
             var len:Int = iLength;
             while (period>0) { iLength += len>>(period--); }
@@ -781,7 +783,7 @@ package org.si.sion.sequencer.base ;
             beginEvent.jump = _lastEvent;   
             
             
-            if (rep != -2147483648) {
+            if (rep != INT_MIN_VALUE) {
                 if (rep < 1 || rep > 65535) throw errorRangeOver("]", 1, 65535);
                 beginEvent.data = rep;
             }
